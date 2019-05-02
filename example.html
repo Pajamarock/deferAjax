@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>Example</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="js/jquery.deferAjax.js"></script>
+    </head>
+    <body />
+    <script>
+        function logStatus (data) {
+            if (data.status === 200) {
+                    console.log('server up!');
+                    return;
+                }
+                console.log('server down :(');
+        }
+        var ajaxQueue = [];
+        var ajaxRequest = $.deferAjax({
+            url: '/test/1.json',
+            type: 'GET',
+            complete: logStatus
+        });
+        var ajaxRequestNonExistingUrl = $.deferAjax({
+            url: '/test/missing.json',
+            type: 'GET',
+            complete: logStatus
+        });
+        for (var i = 0; i < 100; i++) {
+            ajaxQueue.push(ajaxRequest);
+            ajaxQueue.push(ajaxRequest);
+            ajaxQueue.push(ajaxRequest);
+            ajaxQueue.push(ajaxRequestNonExistingUrl);
+        }
+        $.deferAjaxStartQueue(ajaxQueue);
+    </script>
+    
+</html>
+            
